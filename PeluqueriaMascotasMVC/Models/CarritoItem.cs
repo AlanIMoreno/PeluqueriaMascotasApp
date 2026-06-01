@@ -3,9 +3,12 @@
     public class CarritoItem
     {
         public int Id { get; set; }
-        public Producto Producto { get; set; }
-        public Servicio Servicio { get; set; }
+        public int? ProductoId { get; set; }
+        public Producto? Producto { get; set; }
+        public int? ServicioId { get; set; }
+        public Servicio? Servicio { get; set; }
         public int Cantidad { get; set; }
+        public int? CarritoId { get; set; }
 
         public decimal Subtotal
         {
@@ -26,12 +29,14 @@
         public CarritoItem(Producto producto, int cantidad)
         {
             Producto = producto;
+            ProductoId = producto?.Id;
             Cantidad = cantidad;
         }
 
         public CarritoItem(Servicio servicio)
         {
             Servicio = servicio;
+            ServicioId = servicio?.Id;
             Cantidad = 1;
         }
     }

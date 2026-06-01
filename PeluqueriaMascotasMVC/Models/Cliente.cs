@@ -1,16 +1,14 @@
-﻿using System.Collections;
-
-namespace PeluqueriaMascotasMVC.Models
+﻿namespace PeluqueriaMascotasMVC.Models
 {
     public class Cliente : Persona
     {
         private int _dni;
-        private ArrayList _mascotas;
+        private List<Mascota> _mascotas;
 
         public Cliente()
         {
             _dni = 0;
-            _mascotas = new ArrayList();
+            _mascotas = new List<Mascota>();
         }
 
         public Cliente(string usuario, string contraseña, string mail, DateTime fechaAlta,
@@ -18,7 +16,7 @@ namespace PeluqueriaMascotasMVC.Models
             : base(usuario, contraseña, mail, fechaAlta, nombre, apellido, telefono, direccion)
         {
             _dni = dni;
-            _mascotas = new ArrayList();
+            _mascotas = new List<Mascota>();
         }
 
         public int Dni
@@ -27,10 +25,10 @@ namespace PeluqueriaMascotasMVC.Models
             set { _dni = value; }
         }
 
-        public ArrayList Mascotas
+        public List<Mascota> Mascotas
         {
             get { return _mascotas; }
-            set { _mascotas = value; }
+            set { _mascotas = value ?? new List<Mascota>(); }
         }
     }
 }

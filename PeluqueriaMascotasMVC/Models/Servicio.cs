@@ -51,10 +51,10 @@ namespace PeluqueriaMascotasMVC.Models
             set { _descripcion = value; }
         }
 
-        public float Precio
+        public decimal Precio
         {
-            get { return (float)_precio; }
-            set { _precio = (decimal)value; }
+            get { return _precio; }
+            set { _precio = value; }
         }
 
         public int DuracionMinutos

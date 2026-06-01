@@ -2,6 +2,7 @@
 {
     public class Producto
     {
+        private int _id;
         private string _nombre;
         private string _descripcion;
         private float _precioVigente;
@@ -9,6 +10,7 @@
 
         public Producto()
         {
+            _id = 0;
             _nombre = string.Empty;
             _descripcion = string.Empty;
             _precioVigente = 0f;
@@ -23,16 +25,22 @@
             _activo = activo;
         }
 
+        public int Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+
         public string Nombre
         {
             get { return _nombre; }
-            set { _nombre = value; }
+            set { _nombre = value ?? string.Empty; }
         }
 
         public string Descripcion
         {
             get { return _descripcion; }
-            set { _descripcion = value; }
+            set { _descripcion = value ?? string.Empty; }
         }
 
         public float PrecioVigente

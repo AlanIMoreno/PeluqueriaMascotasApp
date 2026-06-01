@@ -4,7 +4,8 @@
     {
         public int Id { get; set; }
         public bool Activo { get; set; }
-        public Cliente Cliente { get; set; }
+        public int ClienteId { get; set; }
+        public Cliente? Cliente { get; set; }
         public List<CarritoItem> CarritoItems { get; set; }
         public DateTime FechaCreacion { get; set; }
 
@@ -25,6 +26,7 @@
         public Carrito(Cliente cliente) : this()
         {
             Cliente = cliente;
+            ClienteId = cliente?.Id ?? 0;
             Activo = true;
         }
 

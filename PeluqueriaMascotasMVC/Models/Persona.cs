@@ -2,6 +2,7 @@
 {
     public abstract class Persona
     {
+        private int _id;
         private string _usuario;
         private string _contraseña;
         private string _mail;
@@ -13,6 +14,7 @@
 
         public Persona()
         {
+            _id = 0;
             _usuario = string.Empty;
             _contraseña = string.Empty;
             _mail = string.Empty;
@@ -36,22 +38,28 @@
             _direccion = direccion;
         }
 
+        public int Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+
         public string Usuario
         {
             get { return _usuario; }
-            set { _usuario = value; }
+            set { _usuario = value ?? string.Empty; }
         }
 
         public string Contraseña
         {
             get { return _contraseña; }
-            set { _contraseña = value; }
+            set { _contraseña = value ?? string.Empty; }
         }
 
         public string Mail
         {
             get { return _mail; }
-            set { _mail = value; }
+            set { _mail = value ?? string.Empty; }
         }
 
         public DateTime FechaAlta
@@ -63,25 +71,25 @@
         public string Nombre
         {
             get { return _nombre; }
-            set { _nombre = value; }
+            set { _nombre = value ?? string.Empty; }
         }
 
         public string Apellido
         {
             get { return _apellido; }
-            set { _apellido = value; }
+            set { _apellido = value ?? string.Empty; }
         }
 
         public string Telefono
         {
             get { return _telefono; }
-            set { _telefono = value; }
+            set { _telefono = value ?? string.Empty; }
         }
 
         public string Direccion
         {
             get { return _direccion; }
-            set { _direccion = value; }
+            set { _direccion = value ?? string.Empty; }
         }
     }
 }
