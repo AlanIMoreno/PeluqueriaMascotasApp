@@ -41,6 +41,12 @@
             set { _precioVigente = value; }
         }
 
+        public decimal Precio
+        {
+            get { return (decimal)_precioVigente; }
+            set { _precioVigente = (float)value; }
+        }
+
         public bool Activo
         {
             get { return _activo; }

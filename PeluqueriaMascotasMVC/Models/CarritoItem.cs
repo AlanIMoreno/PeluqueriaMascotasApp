@@ -15,7 +15,7 @@
                     return Producto.Precio * Cantidad;
 
                 if (Servicio != null)
-                    return Servicio.Precio;
+                    return (decimal)Servicio.Precio;
 
                 return 0;
             }
