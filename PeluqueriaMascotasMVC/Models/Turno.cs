@@ -8,12 +8,12 @@
         public Mascota? Mascota { get; set; }
         public int ServicioId { get; set; }
         public Servicio? Servicio { get; set; }
-        public string Estado { get; set; }
+        public EstadoTurno Estado { get; set; }
         public string Notas { get; set; }
 
         public Turno()
         {
-            Estado = string.Empty;
+            Estado = EstadoTurno.Pendiente;
             Notas = string.Empty;
         }
     }

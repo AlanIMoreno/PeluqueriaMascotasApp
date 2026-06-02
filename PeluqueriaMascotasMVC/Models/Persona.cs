@@ -1,65 +1,36 @@
-﻿namespace PeluqueriaMascotasMVC.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace PeluqueriaMascotasMVC.Models
 {
-    public abstract class Persona
+    public abstract class Persona : IdentityUser
     {
-        private int _id;
-        private string _usuario;
-        private string _contraseña;
-        private string _mail;
         private DateTime _fechaAlta;
         private string _nombre;
         private string _apellido;
         private string _telefono;
         private string _direccion;
+        private int _dni;
 
         public Persona()
         {
-            _id = 0;
-            _usuario = string.Empty;
-            _contraseña = string.Empty;
-            _mail = string.Empty;
             _fechaAlta = DateTime.Now;
             _nombre = string.Empty;
             _apellido = string.Empty;
             _telefono = string.Empty;
             _direccion = string.Empty;
+            _dni = 0;
         }
 
-        public Persona(string usuario, string contraseña, string mail, DateTime fechaAlta,
-            string nombre, string apellido, string telefono, string direccion)
+        public Persona(string usuario, string nombre, string apellido, string email)
         {
-            _usuario = usuario;
-            _contraseña = contraseña;
-            _mail = mail;
-            _fechaAlta = fechaAlta;
+            UserName = usuario;
             _nombre = nombre;
             _apellido = apellido;
-            _telefono = telefono;
-            _direccion = direccion;
-        }
-
-        public int Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
-
-        public string Usuario
-        {
-            get { return _usuario; }
-            set { _usuario = value ?? string.Empty; }
-        }
-
-        public string Contraseña
-        {
-            get { return _contraseña; }
-            set { _contraseña = value ?? string.Empty; }
-        }
-
-        public string Mail
-        {
-            get { return _mail; }
-            set { _mail = value ?? string.Empty; }
+            Email = email;
+            _fechaAlta = DateTime.Now;
+            _telefono = string.Empty;
+            _direccion = string.Empty;
+            _dni = 0;
         }
 
         public DateTime FechaAlta
@@ -90,6 +61,12 @@
         {
             get { return _direccion; }
             set { _direccion = value ?? string.Empty; }
+        }
+
+        public int Dni
+        {
+            get { return _dni; }
+            set { _dni = value; }
         }
     }
 }

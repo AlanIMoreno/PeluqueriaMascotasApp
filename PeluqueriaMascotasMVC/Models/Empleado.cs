@@ -6,9 +6,8 @@
         {
         }
 
-        public Empleado(string usuario, string contraseña, string mail, DateTime fechaAlta,
-            string nombre, string apellido, string telefono, string direccion)
-            : base(usuario, contraseña, mail, fechaAlta, nombre, apellido, telefono, direccion)
+        public Empleado(string usuario, string nombre, string apellido, string email)
+            : base(usuario, nombre, apellido, email)
         {
         }
     }
