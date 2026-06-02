@@ -1,18 +1,15 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using PeluqueriaMascotasMVC.Models;
 
 namespace PeluqueriaMascotasMVC.Data
 {
-    public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
+    public class AppDbContext : IdentityDbContext<Persona, IdentityRole, string>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-
-        // Tablas de Usuarios y Personal
-        public DbSet<Cliente> Clientes { get; set; }
-        public DbSet<Empleado> Empleados { get; set; }
 
         // Tablas de Mascotas
         public DbSet<Mascota> Mascotas { get; set; }
@@ -37,29 +34,13 @@ namespace PeluqueriaMascotasMVC.Data
             base.OnModelCreating(modelBuilder);
 
             // ===================== CONFIGURACIÓN DE PERSONA (TPH) =====================
-            modelBuilder.Entity<Persona>()
-                .HasKey(p => p.Id);
-
+            // Configurar discriminador para Cliente y Empleado
             modelBuilder.Entity<Persona>()
                 .HasDiscriminator<string>("PersonaType")
                 .HasValue<Cliente>("Cliente")
                 .HasValue<Empleado>("Empleado");
 
-            modelBuilder.Entity<Persona>()
-                .Property(p => p.Usuario)
-                .HasMaxLength(50)
-                .IsRequired();
-
-            modelBuilder.Entity<Persona>()
-                .Property(p => p.Contraseña)
-                .HasMaxLength(100)
-                .IsRequired();
-
-            modelBuilder.Entity<Persona>()
-                .Property(p => p.Mail)
-                .HasMaxLength(100)
-                .IsRequired();
-
+            // Configurar propiedades de Persona
             modelBuilder.Entity<Persona>()
                 .Property(p => p.Nombre)
                 .HasMaxLength(100)
@@ -146,8 +127,7 @@ namespace PeluqueriaMascotasMVC.Data
 
             modelBuilder.Entity<Turno>()
                 .Property(t => t.Estado)
-                .HasMaxLength(50)
-                .HasDefaultValue("Pendiente");
+                .HasDefaultValue(EstadoTurno.Pendiente);
 
             modelBuilder.Entity<Turno>()
                 .Property(t => t.Notas)
