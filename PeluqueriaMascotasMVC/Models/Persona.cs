@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
 
 namespace PeluqueriaMascotasMVC.Models
 {
-    public class Persona : IdentityUser
+    public class Persona 
     {
         private DateTime _fechaAlta;
         private string _nombre;
@@ -21,17 +21,7 @@ namespace PeluqueriaMascotasMVC.Models
             _dni = 0;
         }
 
-        public Persona(string usuario, string nombre, string apellido, string email)
-        {
-            UserName = usuario;
-            _nombre = nombre;
-            _apellido = apellido;
-            Email = email;
-            _fechaAlta = DateTime.Now;
-            _telefono = string.Empty;
-            _direccion = string.Empty;
-            _dni = 0;
-        }
+
 
         public DateTime FechaAlta
         {
