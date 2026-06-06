@@ -5,7 +5,7 @@ using PeluqueriaMascotasMVC.Models;
 
 namespace PeluqueriaMascotasMVC.Data
 {
-    public class AppDbContext : IdentityDbContext<Persona, IdentityRole, string>
+    public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
