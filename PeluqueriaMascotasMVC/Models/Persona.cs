@@ -2,7 +2,7 @@
 
 namespace PeluqueriaMascotasMVC.Models
 {
-    public abstract class Persona : IdentityUser
+    public class Persona : IdentityUser
     {
         private DateTime _fechaAlta;
         private string _nombre;

@@ -10,6 +10,10 @@ namespace PeluqueriaMascotasMVC.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
+        //Tablas de Personas
+        public DbSet<Persona> Personas { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Empleado> Empleados { get; set; }
 
         // Tablas de Mascotas
         public DbSet<Mascota> Mascotas { get; set; }
