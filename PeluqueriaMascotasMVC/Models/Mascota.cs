@@ -6,7 +6,7 @@
         private string _nombre;
         private TipoMascota _tipo;
         private int _edad;
-        private string? _clienteId;
+        private int? clienteId;
 
         public Mascota()
         {
@@ -14,7 +14,7 @@
             _nombre = string.Empty;
             _tipo = TipoMascota.Perro;
             _edad = 0;
-            _clienteId = null;
+            clienteId = null;
         }
 
         public Mascota(string nombre, TipoMascota tipo, int edad)
@@ -22,7 +22,7 @@
             _nombre = nombre;
             _tipo = tipo;
             _edad = edad;
-            _clienteId = null;
+            clienteId = null;
         }
 
         public int Id
@@ -49,10 +49,10 @@
             set { _edad = value; }
         }
 
-        public string? ClienteId
+        public int? ClienteId
         {
-            get { return _clienteId; }
-            set { _clienteId = value; }
+            get { return clienteId; }
+            set { clienteId = value; }
         }
 
         public Cliente? Cliente { get; set; }
