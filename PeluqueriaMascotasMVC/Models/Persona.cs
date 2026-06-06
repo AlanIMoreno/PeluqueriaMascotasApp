@@ -10,6 +10,7 @@ namespace PeluqueriaMascotasMVC.Models
         private string _telefono;
         private string _direccion;
         private int _dni;
+        public int Id { get; set; }
 
         public Persona()
         {
@@ -19,8 +20,19 @@ namespace PeluqueriaMascotasMVC.Models
             _telefono = string.Empty;
             _direccion = string.Empty;
             _dni = 0;
+    
         }
 
+
+        public Persona(string nombre, string apellido)
+        {
+            _fechaAlta = DateTime.Now;
+            _nombre = nombre;
+            _apellido = apellido;
+            _telefono = string.Empty;
+            _direccion = string.Empty;
+            _dni = 0;
+        }
 
 
         public DateTime FechaAlta

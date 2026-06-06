@@ -2,6 +2,7 @@
 {
     public class Cliente : Persona
     {
+       
         private List<Mascota> _mascotas;
 
         public Cliente()
@@ -10,7 +11,7 @@
         }
 
         public Cliente(string usuario, string nombre, string apellido, string email, int dni)
-            : base(usuario, nombre, apellido, email)
+               : base(nombre, apellido)
         {
             Dni = dni;
             _mascotas = new List<Mascota>();

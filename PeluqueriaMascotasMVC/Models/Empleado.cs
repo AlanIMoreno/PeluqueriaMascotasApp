@@ -7,7 +7,7 @@
         }
 
         public Empleado(string usuario, string nombre, string apellido, string email)
-            : base(usuario, nombre, apellido, email)
+            : base(nombre, apellido)
         {
         }
     }
