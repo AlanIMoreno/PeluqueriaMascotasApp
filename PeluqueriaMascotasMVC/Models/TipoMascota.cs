@@ -2,8 +2,8 @@
 {
     public enum TipoMascota
     {
-        Perro,
-        Gato,
-        Conejo
+        Perro = 1,
+        Gato = 2,
+        Conejo = 3
     }
 }
