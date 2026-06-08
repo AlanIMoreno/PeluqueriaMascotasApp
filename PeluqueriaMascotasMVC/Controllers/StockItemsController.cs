@@ -10,22 +10,23 @@ using PeluqueriaMascotasMVC.Models;
 
 namespace PeluqueriaMascotasMVC.Controllers
 {
-    public class PersonasController : Controller
+    public class StockItemsController : Controller
     {
         private readonly AppDbContext _context;
 
-        public PersonasController(AppDbContext context)
+        public StockItemsController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Personas
+        // GET: StockItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Personas.ToListAsync());
+            var appDbContext = _context.StockItems.Include(s => s.Producto);
+            return View(await appDbContext.ToListAsync());
         }
 
-        // GET: Personas/Details/5
+        // GET: StockItems/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +34,42 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
+            var stockItem = await _context.StockItems
+                .Include(s => s.Producto)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (stockItem == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(stockItem);
         }
 
-        // GET: Personas/Create
+        // GET: StockItems/Create
         public IActionResult Create()
         {
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre");
             return View();
         }
 
-        // POST: Personas/Create
+        // POST: StockItems/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Persona persona)
+        public async Task<IActionResult> Create([Bind("Id,ProductoId,Cantidad,FechaActualizacion")] StockItem stockItem)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(persona);
+                _context.Add(stockItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre", stockItem.ProductoId);
+            return View(stockItem);
         }
 
-        // GET: Personas/Edit/5
+        // GET: StockItems/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +77,23 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas.FindAsync(id);
-            if (persona == null)
+            var stockItem = await _context.StockItems.FindAsync(id);
+            if (stockItem == null)
             {
                 return NotFound();
             }
-            return View(persona);
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre", stockItem.ProductoId);
+            return View(stockItem);
         }
 
-        // POST: Personas/Edit/5
+        // POST: StockItems/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Persona persona)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductoId,Cantidad,FechaActualizacion")] StockItem stockItem)
         {
-            if (id != persona.Id)
+            if (id != stockItem.Id)
             {
                 return NotFound();
             }
@@ -97,12 +102,12 @@ namespace PeluqueriaMascotasMVC.Controllers
             {
                 try
                 {
-                    _context.Update(persona);
+                    _context.Update(stockItem);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonaExists(persona.Id))
+                    if (!StockItemExists(stockItem.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +118,11 @@ namespace PeluqueriaMascotasMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            ViewData["ProductoId"] = new SelectList(_context.Productos, "Id", "Nombre", stockItem.ProductoId);
+            return View(stockItem);
         }
 
-        // GET: Personas/Delete/5
+        // GET: StockItems/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +130,35 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
+            var stockItem = await _context.StockItems
+                .Include(s => s.Producto)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (stockItem == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(stockItem);
         }
 
-        // POST: Personas/Delete/5
+        // POST: StockItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var persona = await _context.Personas.FindAsync(id);
-            if (persona != null)
+            var stockItem = await _context.StockItems.FindAsync(id);
+            if (stockItem != null)
             {
-                _context.Personas.Remove(persona);
+                _context.StockItems.Remove(stockItem);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonaExists(int id)
+        private bool StockItemExists(int id)
         {
-            return _context.Personas.Any(e => e.Id == id);
+            return _context.StockItems.Any(e => e.Id == id);
         }
     }
 }

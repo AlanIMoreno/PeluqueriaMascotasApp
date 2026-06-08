@@ -10,22 +10,22 @@ using PeluqueriaMascotasMVC.Models;
 
 namespace PeluqueriaMascotasMVC.Controllers
 {
-    public class PersonasController : Controller
+    public class ClientesController : Controller
     {
         private readonly AppDbContext _context;
 
-        public PersonasController(AppDbContext context)
+        public ClientesController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Personas
+        // GET: Clientes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Personas.ToListAsync());
+            return View(await _context.Clientes.ToListAsync());
         }
 
-        // GET: Personas/Details/5
+        // GET: Clientes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
+            var cliente = await _context.Clientes
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (cliente == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(cliente);
         }
 
-        // GET: Personas/Create
+        // GET: Clientes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Personas/Create
+        // POST: Clientes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Persona persona)
+        public async Task<IActionResult> Create([Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Cliente cliente)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(persona);
+                _context.Add(cliente);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            return View(cliente);
         }
 
-        // GET: Personas/Edit/5
+        // GET: Clientes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas.FindAsync(id);
-            if (persona == null)
+            var cliente = await _context.Clientes.FindAsync(id);
+            if (cliente == null)
             {
                 return NotFound();
             }
-            return View(persona);
+            return View(cliente);
         }
 
-        // POST: Personas/Edit/5
+        // POST: Clientes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Persona persona)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Cliente cliente)
         {
-            if (id != persona.Id)
+            if (id != cliente.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace PeluqueriaMascotasMVC.Controllers
             {
                 try
                 {
-                    _context.Update(persona);
+                    _context.Update(cliente);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonaExists(persona.Id))
+                    if (!ClienteExists(cliente.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace PeluqueriaMascotasMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            return View(cliente);
         }
 
-        // GET: Personas/Delete/5
+        // GET: Clientes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +124,34 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
+            var cliente = await _context.Clientes
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (cliente == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(cliente);
         }
 
-        // POST: Personas/Delete/5
+        // POST: Clientes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var persona = await _context.Personas.FindAsync(id);
-            if (persona != null)
+            var cliente = await _context.Clientes.FindAsync(id);
+            if (cliente != null)
             {
-                _context.Personas.Remove(persona);
+                _context.Clientes.Remove(cliente);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonaExists(int id)
+        private bool ClienteExists(int id)
         {
-            return _context.Personas.Any(e => e.Id == id);
+            return _context.Clientes.Any(e => e.Id == id);
         }
     }
 }

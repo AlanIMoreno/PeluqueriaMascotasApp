@@ -10,22 +10,22 @@ using PeluqueriaMascotasMVC.Models;
 
 namespace PeluqueriaMascotasMVC.Controllers
 {
-    public class PersonasController : Controller
+    public class EmpleadosController : Controller
     {
         private readonly AppDbContext _context;
 
-        public PersonasController(AppDbContext context)
+        public EmpleadosController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Personas
+        // GET: Empleados
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Personas.ToListAsync());
+            return View(await _context.Empleados.ToListAsync());
         }
 
-        // GET: Personas/Details/5
+        // GET: Empleados/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
+            var empleado = await _context.Empleados
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (empleado == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(empleado);
         }
 
-        // GET: Personas/Create
+        // GET: Empleados/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Personas/Create
+        // POST: Empleados/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Persona persona)
+        public async Task<IActionResult> Create([Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Empleado empleado)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(persona);
+                _context.Add(empleado);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            return View(empleado);
         }
 
-        // GET: Personas/Edit/5
+        // GET: Empleados/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas.FindAsync(id);
-            if (persona == null)
+            var empleado = await _context.Empleados.FindAsync(id);
+            if (empleado == null)
             {
                 return NotFound();
             }
-            return View(persona);
+            return View(empleado);
         }
 
-        // POST: Personas/Edit/5
+        // POST: Empleados/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Persona persona)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Empleado empleado)
         {
-            if (id != persona.Id)
+            if (id != empleado.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace PeluqueriaMascotasMVC.Controllers
             {
                 try
                 {
-                    _context.Update(persona);
+                    _context.Update(empleado);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonaExists(persona.Id))
+                    if (!EmpleadoExists(empleado.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace PeluqueriaMascotasMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            return View(empleado);
         }
 
-        // GET: Personas/Delete/5
+        // GET: Empleados/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +124,34 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
+            var empleado = await _context.Empleados
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (empleado == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(empleado);
         }
 
-        // POST: Personas/Delete/5
+        // POST: Empleados/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var persona = await _context.Personas.FindAsync(id);
-            if (persona != null)
+            var empleado = await _context.Empleados.FindAsync(id);
+            if (empleado != null)
             {
-                _context.Personas.Remove(persona);
+                _context.Empleados.Remove(empleado);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonaExists(int id)
+        private bool EmpleadoExists(int id)
         {
-            return _context.Personas.Any(e => e.Id == id);
+            return _context.Empleados.Any(e => e.Id == id);
         }
     }
 }

@@ -10,22 +10,23 @@ using PeluqueriaMascotasMVC.Models;
 
 namespace PeluqueriaMascotasMVC.Controllers
 {
-    public class PersonasController : Controller
+    public class CarritosController : Controller
     {
         private readonly AppDbContext _context;
 
-        public PersonasController(AppDbContext context)
+        public CarritosController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Personas
+        // GET: Carritos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Personas.ToListAsync());
+            var appDbContext = _context.Carritos.Include(c => c.Cliente);
+            return View(await appDbContext.ToListAsync());
         }
 
-        // GET: Personas/Details/5
+        // GET: Carritos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +34,42 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
+            var carrito = await _context.Carritos
+                .Include(c => c.Cliente)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (carrito == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(carrito);
         }
 
-        // GET: Personas/Create
+        // GET: Carritos/Create
         public IActionResult Create()
         {
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Apellido");
             return View();
         }
 
-        // POST: Personas/Create
+        // POST: Carritos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Persona persona)
+        public async Task<IActionResult> Create([Bind("Id,Activo,ClienteId,FechaCreacion")] Carrito carrito)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(persona);
+                _context.Add(carrito);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Apellido", carrito.ClienteId);
+            return View(carrito);
         }
 
-        // GET: Personas/Edit/5
+        // GET: Carritos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +77,23 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas.FindAsync(id);
-            if (persona == null)
+            var carrito = await _context.Carritos.FindAsync(id);
+            if (carrito == null)
             {
                 return NotFound();
             }
-            return View(persona);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Apellido", carrito.ClienteId);
+            return View(carrito);
         }
 
-        // POST: Personas/Edit/5
+        // POST: Carritos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Persona persona)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Activo,ClienteId,FechaCreacion")] Carrito carrito)
         {
-            if (id != persona.Id)
+            if (id != carrito.Id)
             {
                 return NotFound();
             }
@@ -97,12 +102,12 @@ namespace PeluqueriaMascotasMVC.Controllers
             {
                 try
                 {
-                    _context.Update(persona);
+                    _context.Update(carrito);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonaExists(persona.Id))
+                    if (!CarritoExists(carrito.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +118,11 @@ namespace PeluqueriaMascotasMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Apellido", carrito.ClienteId);
+            return View(carrito);
         }
 
-        // GET: Personas/Delete/5
+        // GET: Carritos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +130,35 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
+            var carrito = await _context.Carritos
+                .Include(c => c.Cliente)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (carrito == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(carrito);
         }
 
-        // POST: Personas/Delete/5
+        // POST: Carritos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var persona = await _context.Personas.FindAsync(id);
-            if (persona != null)
+            var carrito = await _context.Carritos.FindAsync(id);
+            if (carrito != null)
             {
-                _context.Personas.Remove(persona);
+                _context.Carritos.Remove(carrito);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonaExists(int id)
+        private bool CarritoExists(int id)
         {
-            return _context.Personas.Any(e => e.Id == id);
+            return _context.Carritos.Any(e => e.Id == id);
         }
     }
 }

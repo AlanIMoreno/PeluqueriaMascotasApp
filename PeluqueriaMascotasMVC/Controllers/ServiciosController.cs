@@ -10,22 +10,22 @@ using PeluqueriaMascotasMVC.Models;
 
 namespace PeluqueriaMascotasMVC.Controllers
 {
-    public class PersonasController : Controller
+    public class ServiciosController : Controller
     {
         private readonly AppDbContext _context;
 
-        public PersonasController(AppDbContext context)
+        public ServiciosController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Personas
+        // GET: Servicios
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Personas.ToListAsync());
+            return View(await _context.Servicios.ToListAsync());
         }
 
-        // GET: Personas/Details/5
+        // GET: Servicios/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
+            var servicio = await _context.Servicios
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (servicio == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(servicio);
         }
 
-        // GET: Personas/Create
+        // GET: Servicios/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Personas/Create
+        // POST: Servicios/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Persona persona)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Descripcion,Precio,DuracionMinutos,Tipo")] Servicio servicio)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(persona);
+                _context.Add(servicio);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            return View(servicio);
         }
 
-        // GET: Personas/Edit/5
+        // GET: Servicios/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas.FindAsync(id);
-            if (persona == null)
+            var servicio = await _context.Servicios.FindAsync(id);
+            if (servicio == null)
             {
                 return NotFound();
             }
-            return View(persona);
+            return View(servicio);
         }
 
-        // POST: Personas/Edit/5
+        // POST: Servicios/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FechaAlta,Nombre,Apellido,Telefono,Direccion,Dni,Email")] Persona persona)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,Precio,DuracionMinutos,Tipo")] Servicio servicio)
         {
-            if (id != persona.Id)
+            if (id != servicio.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace PeluqueriaMascotasMVC.Controllers
             {
                 try
                 {
-                    _context.Update(persona);
+                    _context.Update(servicio);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonaExists(persona.Id))
+                    if (!ServicioExists(servicio.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace PeluqueriaMascotasMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(persona);
+            return View(servicio);
         }
 
-        // GET: Personas/Delete/5
+        // GET: Servicios/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +124,34 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
-            var persona = await _context.Personas
+            var servicio = await _context.Servicios
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (persona == null)
+            if (servicio == null)
             {
                 return NotFound();
             }
 
-            return View(persona);
+            return View(servicio);
         }
 
-        // POST: Personas/Delete/5
+        // POST: Servicios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var persona = await _context.Personas.FindAsync(id);
-            if (persona != null)
+            var servicio = await _context.Servicios.FindAsync(id);
+            if (servicio != null)
             {
-                _context.Personas.Remove(persona);
+                _context.Servicios.Remove(servicio);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonaExists(int id)
+        private bool ServicioExists(int id)
         {
-            return _context.Personas.Any(e => e.Id == id);
+            return _context.Servicios.Any(e => e.Id == id);
         }
     }
 }
