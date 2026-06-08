@@ -83,6 +83,7 @@ namespace PeluqueriaMascotasMVC.Data
 
             modelBuilder.Entity<Mascota>()
                 .Property(m => m.Tipo)
+                .HasDefaultValue(TipoMascota.Adesignar)
                 .IsRequired();
 
             modelBuilder.Entity<Mascota>()
@@ -110,8 +111,9 @@ namespace PeluqueriaMascotasMVC.Data
                 .IsRequired();
 
             modelBuilder.Entity<Servicio>()
-                .Property(s => s.Activo)
-                .HasDefaultValue(true);
+                   .Property(s => s.Tipo)
+                   .HasDefaultValue(TipoServicio.Consulta)
+                   .IsRequired();
 
             // ===================== CONFIGURACIÓN DE TURNO =====================
             modelBuilder.Entity<Turno>()
@@ -129,7 +131,7 @@ namespace PeluqueriaMascotasMVC.Data
                 .HasForeignKey(t => t.ServicioId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Turno>()
+            modelBuilder.Entity<Turno>() 
                 .Property(t => t.Estado)
                 .HasDefaultValue(EstadoTurno.Pendiente);
 
