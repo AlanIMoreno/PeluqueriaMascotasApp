@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PeluqueriaMascotasMVC.Models;
 
 namespace PeluqueriaMascotasMVC.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
+ 
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
@@ -267,6 +270,13 @@ namespace PeluqueriaMascotasMVC.Data
                 .Property(c => c.Estado)
                 .HasMaxLength(50)
                 .HasDefaultValue("Pendiente");
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOne(u => u.Cliente)
+                .WithMany()
+                .HasForeignKey(u => u.ClienteId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }
