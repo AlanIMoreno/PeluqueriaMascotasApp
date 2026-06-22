@@ -1,11 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using PeluqueriaMascotasMVC.Models;
 
 namespace PeluqueriaMascotasMVC.Data
 {
-    public class AppDbContext : IdentityDbContext<IdentityUser>
+    public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -63,9 +61,11 @@ namespace PeluqueriaMascotasMVC.Data
                 .Property(p => p.Direccion)
                 .HasMaxLength(200);
 
+            // ===================== CONFIGURACIÓN DE EMAIL =====================
             modelBuilder.Entity<Persona>()
                 .Property(p => p.Email)
-                .HasMaxLength(100);
+                .HasMaxLength(100)
+                .IsRequired(false); // Nullable para datos existentes
 
             // ===================== CONFIGURACIÓN DE CLIENTE =====================
             modelBuilder.Entity<Cliente>()
@@ -75,13 +75,6 @@ namespace PeluqueriaMascotasMVC.Data
             modelBuilder.Entity<Cliente>()
                 .HasIndex(c => c.Dni)
                 .IsUnique();
-
-            // Relación opcional Cliente -> IdentityUser
-            // Un Cliente puede tener 0 o 1 IdentityUser asociado
-            // Esto permite transicionar gradualmente de clientes sin autenticación
-            modelBuilder.Entity<Cliente>()
-                .Property(c => c.IdentityUserId)
-                .HasMaxLength(450); // Longitud estándar de Id en AspNetUsers
 
             // ===================== CONFIGURACIÓN DE MASCOTA =====================
             modelBuilder.Entity<Mascota>()
