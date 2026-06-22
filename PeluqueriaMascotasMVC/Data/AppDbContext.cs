@@ -5,11 +5,15 @@ using PeluqueriaMascotasMVC.Models;
 
 namespace PeluqueriaMascotasMVC.Data
 {
-    public class AppDbContext : IdentityDbContext<Persona, IdentityRole, string>
+    public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
+        //Tablas de Personas
+        public DbSet<Persona> Personas { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Empleado> Empleados { get; set; }
 
         // Tablas de Mascotas
         public DbSet<Mascota> Mascotas { get; set; }
@@ -79,6 +83,7 @@ namespace PeluqueriaMascotasMVC.Data
 
             modelBuilder.Entity<Mascota>()
                 .Property(m => m.Tipo)
+                .HasDefaultValue(TipoMascota.Adesignar)
                 .IsRequired();
 
             modelBuilder.Entity<Mascota>()
@@ -106,8 +111,9 @@ namespace PeluqueriaMascotasMVC.Data
                 .IsRequired();
 
             modelBuilder.Entity<Servicio>()
-                .Property(s => s.Activo)
-                .HasDefaultValue(true);
+                   .Property(s => s.Tipo)
+                   .HasDefaultValue(TipoServicio.Consulta)
+                   .IsRequired();
 
             // ===================== CONFIGURACIÓN DE TURNO =====================
             modelBuilder.Entity<Turno>()
@@ -125,7 +131,7 @@ namespace PeluqueriaMascotasMVC.Data
                 .HasForeignKey(t => t.ServicioId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Turno>()
+            modelBuilder.Entity<Turno>() 
                 .Property(t => t.Estado)
                 .HasDefaultValue(EstadoTurno.Pendiente);
 

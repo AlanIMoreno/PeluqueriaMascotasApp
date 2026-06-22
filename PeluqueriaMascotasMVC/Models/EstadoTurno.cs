@@ -2,9 +2,9 @@ namespace PeluqueriaMascotasMVC.Models
 {
     public enum EstadoTurno
     {
-        Pendiente = 1,
-        Confirmado = 2,
-        Finalizado = 3,
-        Cancelado = 4
+        Pendiente = 0,
+        Confirmado = 1,
+        Finalizado = 2,
+        Cancelado = 3
     }
 }

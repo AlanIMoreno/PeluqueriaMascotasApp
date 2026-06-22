@@ -13,14 +13,27 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-var app = builder.Build();
-
-// Inicializar roles
-using (var scope = app.Services.CreateScope())
+// Configurar ASP.NET Core Identity
+builder.Services.AddIdentity<Persona, IdentityRole>(options =>
 {
-    var roleInitializationService = scope.ServiceProvider.GetRequiredService<RoleInitializationService>();
-    await roleInitializationService.InitializeRolesAsync();
-}
+    options.Password.RequiredLength = 6;
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
+// Configurar opciones de autenticación por cookies
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Auth/Login";
+    options.LogoutPath = "/Auth/Logout";
+    options.AccessDeniedPath = "/Auth/AccessDenied";
+});
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
