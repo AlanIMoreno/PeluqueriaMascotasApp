@@ -10,7 +10,8 @@ namespace PeluqueriaMascotasMVC.Models
         private string _telefono;
         private string _direccion;
         private int _dni;
-        public string _email;
+        private string _email;
+
         public int Id { get; set; }
 
         public Persona()
@@ -22,9 +23,8 @@ namespace PeluqueriaMascotasMVC.Models
             _direccion = string.Empty;
             _email = string.Empty;
             _dni = 0;
-    
-        }
 
+        }
 
         public Persona(string nombre, string apellido)
         {
@@ -33,9 +33,9 @@ namespace PeluqueriaMascotasMVC.Models
             _apellido = apellido;
             _telefono = string.Empty;
             _direccion = string.Empty;
+            _email = string.Empty;
             _dni = 0;
         }
-
 
         public DateTime FechaAlta
         {
@@ -72,6 +72,7 @@ namespace PeluqueriaMascotasMVC.Models
             get { return _dni; }
             set { _dni = value; }
         }
+
         public string Email
         {
             get { return _email; }
