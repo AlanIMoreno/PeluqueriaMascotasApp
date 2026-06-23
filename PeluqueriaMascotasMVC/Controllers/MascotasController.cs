@@ -1,102 +1,120 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PeluqueriaMascotasMVC.Data;
 using PeluqueriaMascotasMVC.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PeluqueriaMascotasMVC.Controllers
 {
+    [Authorize]
     public class MascotasController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public MascotasController(AppDbContext context)
+        public MascotasController(AppDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: Mascotas
+        // ✅ GET: Mascotas (solo del usuario logueado)
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Mascotas.Include(m => m.Cliente);
-            return View(await appDbContext.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null || user.ClienteId == null)
+                return Unauthorized();
+
+            var mascotas = _context.Mascotas
+                .Where(m => m.ClienteId == user.ClienteId)
+                .Include(m => m.Cliente);
+
+            return View(await mascotas.ToListAsync());
         }
 
-        // GET: Mascotas/Details/5
+        // ✅ GET: Mascotas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
+
+            var user = await _userManager.GetUserAsync(User);
 
             var mascota = await _context.Mascotas
                 .Include(m => m.Cliente)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (mascota == null)
-            {
-                return NotFound();
-            }
+
+            if (mascota == null || mascota.ClienteId != user.ClienteId)
+                return Unauthorized();
 
             return View(mascota);
         }
 
-        // GET: Mascotas/Create
+        // ✅ GET: Mascotas/Create
         public IActionResult Create()
         {
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Apellido");
             return View();
         }
 
-        // POST: Mascotas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // ✅ POST: Mascotas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Tipo,Edad,ClienteId")] Mascota mascota)
+        public async Task<IActionResult> Create([Bind("Nombre,Tipo,Edad")] Mascota mascota)
         {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null || user.ClienteId == null)
+                return Unauthorized();
+
+            mascota.ClienteId = user.ClienteId.Value;
+
             if (ModelState.IsValid)
             {
                 _context.Add(mascota);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Apellido", mascota.ClienteId);
+
             return View(mascota);
         }
 
-        // GET: Mascotas/Edit/5
+        // ✅ GET: Mascotas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
+
+            var user = await _userManager.GetUserAsync(User);
 
             var mascota = await _context.Mascotas.FindAsync(id);
-            if (mascota == null)
-            {
-                return NotFound();
-            }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Apellido", mascota.ClienteId);
+
+            if (mascota == null || mascota.ClienteId != user.ClienteId)
+                return Unauthorized();
+
             return View(mascota);
         }
 
-        // POST: Mascotas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // ✅ POST: Mascotas/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Tipo,Edad,ClienteId")] Mascota mascota)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Tipo,Edad")] Mascota mascota)
         {
+            var user = await _userManager.GetUserAsync(User);
+
             if (id != mascota.Id)
-            {
                 return NotFound();
-            }
+
+            var mascotaDb = await _context.Mascotas.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+
+            if (mascotaDb == null || mascotaDb.ClienteId != user.ClienteId)
+                return Unauthorized();
+
+            // 🔥 Mantener el ClienteId original
+            mascota.ClienteId = mascotaDb.ClienteId;
 
             if (ModelState.IsValid)
             {
@@ -107,58 +125,52 @@ namespace PeluqueriaMascotasMVC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MascotaExists(mascota.Id))
-                    {
+                    if (!_context.Mascotas.Any(e => e.Id == mascota.Id))
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Apellido", mascota.ClienteId);
+
             return View(mascota);
         }
 
-        // GET: Mascotas/Delete/5
+        // ✅ GET: Mascotas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
+
+            var user = await _userManager.GetUserAsync(User);
 
             var mascota = await _context.Mascotas
                 .Include(m => m.Cliente)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (mascota == null)
-            {
-                return NotFound();
-            }
+
+            if (mascota == null || mascota.ClienteId != user.ClienteId)
+                return Unauthorized();
 
             return View(mascota);
         }
 
-        // POST: Mascotas/Delete/5
+        // ✅ POST: Mascotas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var user = await _userManager.GetUserAsync(User);
+
             var mascota = await _context.Mascotas.FindAsync(id);
-            if (mascota != null)
-            {
-                _context.Mascotas.Remove(mascota);
-            }
 
+            if (mascota == null || mascota.ClienteId != user.ClienteId)
+                return Unauthorized();
+
+            _context.Mascotas.Remove(mascota);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
-        private bool MascotaExists(int id)
-        {
-            return _context.Mascotas.Any(e => e.Id == id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

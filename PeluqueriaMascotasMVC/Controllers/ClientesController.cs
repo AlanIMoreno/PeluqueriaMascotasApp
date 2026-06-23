@@ -33,8 +33,11 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
+            // Agregamos .Include(c => c.Mascotas) para cargar sus mascotas asociadas
             var cliente = await _context.Clientes
+                .Include(c => c.Mascotas)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (cliente == null)
             {
                 return NotFound();
@@ -124,8 +127,11 @@ namespace PeluqueriaMascotasMVC.Controllers
                 return NotFound();
             }
 
+            // También incluimos las mascotas aquí para poder listarlas en la vista de confirmación
             var cliente = await _context.Clientes
+                .Include(c => c.Mascotas)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (cliente == null)
             {
                 return NotFound();

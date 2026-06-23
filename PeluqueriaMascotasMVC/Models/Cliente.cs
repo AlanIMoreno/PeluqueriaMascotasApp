@@ -23,7 +23,7 @@
         /// Permite relacionar un Cliente con su usuario autenticado.
         /// Nullable porque los Clientes existentes pueden no tener Identity aún.
         /// </summary>
-        public string? IdentityUserId { get; set; }
+       
 
         public List<Mascota> Mascotas
         {
